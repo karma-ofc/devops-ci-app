@@ -66,9 +66,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
 
-    # ИНЦИДЕНТ 1: права на публикацию пока недостаточно.
-    permissions:
-      contents: read
+  permissions:
+    contents: read
+    packages: write
 
     steps:
       - name: Checkout
