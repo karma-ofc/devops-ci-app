@@ -1,2 +1,12 @@
 # devops-ci-app
-DevOps CI sample application
+
+Учебное Flask-приложение для практической работы № 10.
+
+CI: Pylint → pytest → Docker build → smoke-test → GHCR.
+
+Публикация образа выполняется только из `main`. В Pull Request выполняются
+проверки без push.
+
+- health endpoint: `/health`;
+- образ: `ghcr.io/karma-ofc/devops-ci-app`;
+- основной workflow: `.github/workflows/ci.yml`.
