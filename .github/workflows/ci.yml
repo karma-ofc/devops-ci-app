@@ -66,8 +66,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
 
-  permissions:
-    contents: read
+    permissions:
+      contents: read
     packages: write
 
     steps:
