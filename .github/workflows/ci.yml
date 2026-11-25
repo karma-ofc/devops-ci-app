@@ -130,3 +130,28 @@ jobs:
           docker push "${IMAGE_NAME}:${GITHUB_SHA}" | tee push-sha.log
           docker push "${IMAGE_NAME}:latest" | tee push-latest.log
           grep -E 'digest: sha256:' push-sha.log push-latest.log
+  deploy:
+    needs: image
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: [self-hosted, devops-vm]
+    permissions:
+      contents: read
+    concurrency:
+      group: deploy-devops-vm
+      cancel-in-progress: false
+    env:
+      VM_HOST: 192.168.56.101 # Твой Host-only IP
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Deploy with Ansible
+        working-directory: ansible
+        run: |
+          ansible-playbook site.yml -e "app_tag=${{ github.sha }}"
+
+      - name: Check through Nginx
+        run: |
+          curl --fail -L http://${{ env.VM_HOST }}/health
